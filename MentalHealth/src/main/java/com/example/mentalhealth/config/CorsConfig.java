@@ -1,4 +1,4 @@
-package com.example.mentalhealth.util;
+package com.example.mentalhealth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +13,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:8080")
+                        .allowedOrigins("http://localhost:8081")
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowedHeaders("Content-Type", "Authorization")
                         .allowCredentials(true);

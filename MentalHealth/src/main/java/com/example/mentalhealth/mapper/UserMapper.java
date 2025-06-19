@@ -10,4 +10,8 @@ import java.util.List;
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
 
+    // 查询用户是否存在
+    User queryUserByUsername(String username);
+
+
 }

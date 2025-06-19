@@ -103,11 +103,16 @@ export default {
 
           this.$http.post('/api/register', userData)
               .then(response => {
-                this.$message.success('注册成功，请登录');
-                this.$router.push('/login');
+                if (response && response.data.code === 200) {
+                  this.$message.success(response.data.message || '注册成功，请登录');
+                  this.$router.push('/login');
+                } else {
+                  console.error('注册成功但响应格式异常:', response);
+                  this.$message.error('注册成功，但服务器响应异常');
+                }
               })
               .catch(error => {
-                this.$message.error(error.response.data || '注册失败，请稍后重试');
+                this.$message.error('注册失败，请稍后重试');
               });
         }
       });

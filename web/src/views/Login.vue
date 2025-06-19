@@ -64,15 +64,26 @@ export default {
         if (valid) {
           this.$http.post('/api/login', this.loginForm)
               .then(response => {
-                this.$message.success('登录成功');
-                // 存储用户信息和token
-                localStorage.setItem('user', JSON.stringify(response.data.user));
-
-                // 跳转到首页
-                this.$router.push('/dashboard');
+                if (response && response.data.code === 200) {
+                  //提取返回的用户信息
+                  const userData = response.data.data;
+                  // 存储用户信息、token 和角色信息
+                  localStorage.setItem('user', JSON.stringify(userData.username));
+                  const roles = userData.rid === 1 ? ['user'] : ['admin'];
+                  localStorage.setItem('roles', JSON.stringify(roles));
+                  // 根据角色信息跳转到不同的页面
+                  if (roles.includes('admin')) {
+                    this.$router.push('/admin/dashboard');
+                  } else {
+                    this.$router.push('/user/dashboard');
+                  }
+                } else {
+                  console.error('登录成功但响应格式异常:', response);
+                  this.$message.error('登录成功，但服务器响应异常');
+                }
               })
               .catch(error => {
-                this.$message.error(error.response.data || '登录失败，请稍后重试');
+                this.$message.error('登录失败，请稍后重试');
               });
         }
       });
