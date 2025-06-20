@@ -1,6 +1,5 @@
 <template>
   <div class="admin-dashboard">
-    <!-- 仅保留内容区域，不再包含侧边栏和头部 -->
     <el-row :gutter="20">
       <el-col :span="6">
         <el-card class="stat-card">
@@ -22,7 +21,7 @@
       </el-col>
       <el-col :span="6">
         <el-card class="stat-card">
-          <div class="stat-title">今日新增</div>
+          <div class="stat-title">今日新增答卷</div>
           <div class="stat-value">{{ todayCount }}</div>
         </el-card>
       </el-col>
@@ -55,29 +54,51 @@
 </template>
 
 <script>
+
 export default {
   name: 'AdminDashboard',
   data() {
     return {
-      userCount: 1024,
-      examCount: 24,
-      answerCount: 3580,
-      todayCount: 24,
-      recentAnswers: [
-        { username: 'user1', examTitle: '抑郁自评量表', score: 75, submitTime: '2025-06-19 14:30' },
-        { username: 'user2', examTitle: '焦虑自评量表', score: 60, submitTime: '2025-06-19 10:15' },
-        { username: 'user3', examTitle: '生活压力量表', score: 85, submitTime: '2025-06-18 16:20' },
-        { username: 'user4', examTitle: '抑郁自评量表', score: 65, submitTime: '2025-06-18 09:45' }
-      ]
+      userCount: 0,
+      examCount: 0,
+      answerCount: 0,
+      todayCount: 0,
+      recentAnswers: []
     }
   },
   mounted() {
-    // 初始化图表
+    this.fetchData(); // 调用获取数据的方法
     this.initChart();
   },
   methods: {
+    // 获取数据的方法
+    fetchData() {
+      // 假设获取统计数据的接口
+      this.$http.get('/api/getStatsData')
+          .then(response => {
+            const data = response.data;
+            this.userCount = data.data.userCount;
+            this.examCount = data.data.examCount;
+            this.answerCount = data.data.answerCount;
+            this.todayCount = data.data.todayAnswerCount;
+          })
+          .catch(error => {
+            console.error('获取统计数据失败:', error);
+          });
+
+      // 假设获取最近答卷数据的接口
+      this.$http.get('/api/recentAnswers')
+          .then(response => {
+            this.recentAnswers = response.data;
+          })
+          .catch(error => {
+            console.error('获取最近答卷数据失败:', error);
+          });
+    },
     initChart() {
-      // ECharts初始化代码（略，与之前相同）
+      // ECharts初始化代码
+      // 这里需要你根据实际从后端获取的图表数据，结合 ECharts 进行初始化和渲染
+      // 例如如果后端返回了用于图表的数据，你可以在这里处理
     }
   }
 }

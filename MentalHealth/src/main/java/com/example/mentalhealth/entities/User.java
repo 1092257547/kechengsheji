@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @TableName("user")
 public class User {
-    @TableId(type = IdType.AUTO)
+    @TableId(value = "uId",type = IdType.AUTO)
     private Integer uId;//用户id
     private String username;//账号
     private String Name;//账户名

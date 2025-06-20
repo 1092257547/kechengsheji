@@ -5,7 +5,7 @@
       <div class="logo" @click="goHome">心灵守护 - 管理后台</div>
       <el-menu
           :default-active="activeMenu"
-          class="el-menu-vertical-demo"
+          class="el-menu-vertical-demo custom-menu"
           router
           background-color="#304156"
           text-color="#bfcbd9"
@@ -20,21 +20,23 @@
             <el-icon><user /></el-icon>
             <span>用户管理</span>
           </template>
-          <el-menu-item index="/admin/user-management">用户列表</el-menu-item>
+          <!-- 二级菜单，添加 custom-sub-menu-item 类名用于样式控制 -->
+          <el-menu-item class="custom-sub-menu-item" index="/admin/user-management">用户列表</el-menu-item>
         </el-submenu>
         <el-submenu index="exam">
           <template #title>
             <el-icon><document /></el-icon>
             <span>试卷管理</span>
           </template>
-          <el-menu-item index="/admin/exam-management">试卷列表</el-menu-item>
+          <el-menu-item class="custom-sub-menu-item" index="/admin/exam-management">试卷列表</el-menu-item>
+          <el-menu-item class="custom-sub-menu-item" index="/admin/question-management">试题列表</el-menu-item>
         </el-submenu>
         <el-submenu index="answer">
           <template #title>
             <el-icon><message /></el-icon>
             <span>答卷管理</span>
           </template>
-          <el-menu-item index="/admin/answer-management">答卷列表</el-menu-item>
+          <el-menu-item class="custom-sub-menu-item" index="/admin/answer-management">答卷列表</el-menu-item>
         </el-submenu>
       </el-menu>
     </el-aside>
@@ -72,14 +74,14 @@ export default {
   name: 'AdminLayout',
   data() {
     return {
-      username: '管理员',
+      username: this.getUsername(),
       activeMenu: this.$route.path
     }
   },
   computed: {
     pageTitle() {
       // 从路由meta获取页面标题
-      return this.$route.meta.title || '管理后台';
+      return this.$route.meta.title || '首页';
     }
   },
   methods: {
@@ -91,13 +93,40 @@ export default {
         localStorage.removeItem('user');
         this.$router.push('/login');
       }
+    },
+    getUsername() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      return user ? user : '';
     }
   },
   watch: {
     // 监听路由变化，更新活跃菜单
-    '$route.path': function(newPath) {
+    '$route.path': function (newPath) {
       this.activeMenu = newPath;
     }
   }
 }
 </script>
+
+<style scoped>
+/* 侧边栏整体样式 */
+.el-aside {
+  display: flex;
+  flex-direction: column;
+}
+.logo {
+  text-align: center;
+  padding: 20px 0;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+}
+/* 自定义菜单类名，用于覆盖默认样式 */
+.custom-menu {
+  border-right: none;
+}
+/* 二级菜单样式，设置缩进，实现靠右效果 */
+.custom-sub-menu-item {
+  padding-left: 60px !important; /* 比一级菜单更靠右，可根据需求调整 */
+}
+</style>

@@ -6,20 +6,20 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.math.BigDecimal;
+import java.util.Date;
 
-//用户角色实体类
-@Data
+
+// 试卷
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("role")
-public class Role {
+@Data
+@TableName("exam_paper")
+public class ExamPaper {
     @TableId(type = IdType.AUTO)
-    private Integer rId;//角色id
-    private  String rName;//角色名称
-    private String rCode;//角色代码
-
-    public Role(String rName, String rCode, String pId) {
-        this.rName = rName;
-        this.rCode = rCode;
-    }
+    private Long id;            // 试卷ID
+    private String title;       // 试卷标题
+    private BigDecimal totalScore; // 总分
+    private BigDecimal passScore;  // 及格分数
+    private Date createTime;    // 创建时间
 }

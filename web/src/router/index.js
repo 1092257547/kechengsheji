@@ -10,6 +10,7 @@ import ExamManagement from '../views/admin/exam-management/ExamManagement.vue'
 import AnswerManagement from '../views/admin/answer-management/AnswerManagement.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register'
+import QuestionManagement from "@/views/admin/exam-management/QuestionManagement";
 
 Vue.use(VueRouter)
 
@@ -76,7 +77,7 @@ const routes = [
         path: 'dashboard',
         name: 'AdminDashboard',
         component: AdminDashboard,
-        meta: { title: '管理后台', requiresAuth: true, isAdmin: true }
+        meta: { title: '首页', requiresAuth: true, isAdmin: true }
       },
       {
         path: 'user-management',
@@ -89,6 +90,12 @@ const routes = [
         name: 'ExamManagement',
         component: ExamManagement,
         meta: { title: '试卷管理', requiresAuth: true, isAdmin: true }
+      },
+        {
+        path: 'question-management',
+        name: 'QuestionManagement',
+        component: QuestionManagement,
+        meta: { title: '试题管理', requiresAuth: true, isAdmin: true }
       },
       {
         path: 'answer-management',

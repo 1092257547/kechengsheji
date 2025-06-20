@@ -19,7 +19,7 @@
           <el-input v-model="filterForm.email" placeholder="请输入邮箱"></el-input>
         </el-form-item>
         <el-form-item label="性别">
-          <el-select v-model="filterForm.gender" placeholder="请选择性别">
+          <el-select v-model="filterForm.sex" placeholder="请选择性别">
             <el-option label="男" value="male"></el-option>
             <el-option label="女" value="female"></el-option>
           </el-select>
@@ -37,6 +37,7 @@
       </el-form>
     </el-card>
 
+    <!-- 用户列表展示 -->
     <el-card class="user-table-card">
       <el-table
           :data="userList"
@@ -47,10 +48,10 @@
           style="width: 100%">
         <el-table-column type="index" label="序号" width="60"></el-table-column>
         <el-table-column prop="username" label="账户" width="120"></el-table-column>
-        <el-table-column prop="gender" label="性别" width="80">
+        <el-table-column prop="sex" label="性别" width="80">
           <template #default="scope">
-            <el-tag :type="scope.row.gender === 'male' ? 'primary' : 'success'">
-              {{ scope.row.gender === 'male' ? '男' : '女' }}
+            <el-tag :type="scope.row.sex === '男' ? 'primary' : 'success'">
+              {{ scope.row.sex === 'male' ? '男' : '女' }}
             </el-tag>
           </template>
         </el-table-column>
@@ -92,7 +93,7 @@
           <el-input v-model="userForm.password" type="password"></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="gender">
-          <el-radio-group v-model="userForm.gender">
+          <el-radio-group v-model="userForm.sex">
             <el-radio label="male">男</el-radio>
             <el-radio label="female">女</el-radio>
           </el-radio-group>
@@ -134,13 +135,13 @@ export default {
       filterForm: {
         username: '',
         email: '',
-        gender: ''
+        sex: ''
       },
       userForm: {
         id: null,
         username: '',
         password: '',
-        gender: 'male',
+        sex: 'male',
         email: '',
         phone: ''
       },
@@ -176,28 +177,17 @@ export default {
   methods: {
     // 加载用户列表
     loadUserList() {
-      // 模拟API请求
+      // API请求
       setTimeout(() => {
-        // 实际项目中应替换为真实API调用
-        // axios.get('/api/users', { params: { ...this.filterForm, page: this.currentPage, size: this.pageSize } })
-        //   .then(response => {
-        //     this.userList = response.data.content;
-        //     this.total = response.data.totalElements;
-        //   })
-        //   .catch(error => {
-        //     this.$message.error('加载用户列表失败');
-        //     console.error(error);
-        //   });
-
-        // 模拟数据
-        this.userList = [
-          { id: 1, username: 'admin', gender: 'male', email: 'admin@example.com', phone: '13800138000' },
-          { id: 2, username: 'user1', gender: 'female', email: 'user1@example.com', phone: '13900139000' },
-          { id: 3, username: 'user2', gender: 'male', email: 'user2@example.com', phone: '13700137000' },
-          { id: 4, username: 'user3', gender: 'female', email: 'user3@example.com', phone: '13600136000' },
-          { id: 5, username: 'user4', gender: 'male', email: 'user4@example.com', phone: '13500135000' }
-        ];
-        this.total = 20;
+         this.$http.get('/api/GetUsers', { params: { ...this.filterForm, page: this.currentPage, size: this.pageSize } })
+           .then(response => {
+             this.userList = response.data.data.list;
+             this.total = response.data.data.total;
+           })
+           .catch(error => {
+             this.$message.error('加载用户列表失败');
+             console.error(error);
+           });
       }, 300);
     },
 
@@ -212,7 +202,7 @@ export default {
       this.filterForm = {
         username: '',
         email: '',
-        gender: ''
+        sex: ''
       };
       this.currentPage = 1;
       this.loadUserList();
@@ -241,7 +231,7 @@ export default {
         id: null,
         username: '',
         password: '',
-        gender: 'male',
+        sex: 'male',
         email: '',
         phone: ''
       };
@@ -258,38 +248,34 @@ export default {
     saveUser() {
       this.$refs.userFormRef.validate(valid => {
         if (valid) {
-          // 模拟API请求
+          //API请求
           setTimeout(() => {
-            // 实际项目中应替换为真实API调用
-            // if (this.userForm.id) {
-            //   // 更新用户
-            //   axios.put(`/api/users/${this.userForm.id}`, this.userForm)
-            //     .then(() => {
-            //       this.$message.success('用户更新成功');
-            //       this.dialogVisible = false;
-            //       this.loadUserList();
-            //     })
-            //     .catch(error => {
-            //       this.$message.error('用户更新失败');
-            //       console.error(error);
-            //     });
-            // } else {
-            //   // 创建用户
-            //   axios.post('/api/users', this.userForm)
-            //     .then(() => {
-            //       this.$message.success('用户创建成功');
-            //       this.dialogVisible = false;
-            //       this.loadUserList();
-            //     })
-            //     .catch(error => {
-            //       this.$message.error('用户创建失败');
-            //       console.error(error);
-            //     });
-            // }
+             if (this.userForm.uid) {
+               // 更新用户
+               this.$http.post(`/api/updateUser`, this.userForm)
+                 .then(() => {
+                   this.$message.success('用户更新成功');
+                   this.dialogVisible = false;
+                   this.loadUserList();
+                 })
+                 .catch(error => {
+                   this.$message.error('用户更新失败');
+                   console.error(error);
+                 });
+             } else {
+               // 创建用户
+               this.$http.post('/api/AddUser', this.userForm)
+                 .then(() => {
+                   this.$message.success('用户创建成功');
+                   this.dialogVisible = false;
+                   this.loadUserList();
+                 })
+                 .catch(error => {
+                   this.$message.error('用户创建失败');
+                  console.error(error);
+                 });
+             }
 
-            this.$message.success(this.userForm.id ? '用户更新成功' : '用户创建成功');
-            this.dialogVisible = false;
-            this.loadUserList();
           }, 300);
         } else {
           return false;
@@ -299,29 +285,24 @@ export default {
 
     // 处理删除用户
     handleDeleteUser(row) {
-      this.currentUserId = row.id;
+      this.currentUserId = row.uid;
       this.deleteDialogVisible = true;
     },
 
     // 确认删除用户
     confirmDeleteUser() {
-      // 模拟API请求
+      // API请求
       setTimeout(() => {
-        // 实际项目中应替换为真实API调用
-        // axios.delete(`/api/users/${this.currentUserId}`)
-        //   .then(() => {
-        //     this.$message.success('用户删除成功');
-        //     this.deleteDialogVisible = false;
-        //     this.loadUserList();
-        //   })
-        //   .catch(error => {
-        //     this.$message.error('用户删除失败');
-        //     console.error(error);
-        //   });
-
-        this.$message.success('用户删除成功');
-        this.deleteDialogVisible = false;
-        this.loadUserList();
+        // 删除用户
+         this.$http.delete(`/api/deleteUser/${this.currentUserId}`)
+           .then(() => {
+             this.$message.success('用户删除成功');
+             this.deleteDialogVisible = false;
+             this.loadUserList();
+           })
+           .catch(error => {
+             this.$message.error('用户删除失败');
+           });
       }, 300);
     }
   }

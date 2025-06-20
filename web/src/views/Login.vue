@@ -69,7 +69,7 @@ export default {
                   const userData = response.data.data;
                   // 存储用户信息、token 和角色信息
                   localStorage.setItem('user', JSON.stringify(userData.username));
-                  const roles = userData.rid === 1 ? ['user'] : ['admin'];
+                  const roles = userData.rid === 1 ? ['admin'] : ['user'] ;
                   localStorage.setItem('roles', JSON.stringify(roles));
                   // 根据角色信息跳转到不同的页面
                   if (roles.includes('admin')) {

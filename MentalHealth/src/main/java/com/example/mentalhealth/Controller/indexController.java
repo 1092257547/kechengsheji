@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
-import java.util.Map;
-
 //与前端交互数据
 @RestController
 @RequestMapping("/api")
@@ -32,6 +29,8 @@ public class indexController {
         if (userService.queryUserByUsername(user.getUsername())!=null) {
             return new ResultData(400, "用户已存在");
         }
+        // 设置用户角色为普通用户
+        user.setRId(2);
         // 保存用户
         int i = userService.register(user);
         if(i==0){
