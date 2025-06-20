@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mentalhealth.mapper.QuestionMapper">
+    <resultMap id="QuestionResultMap" type="com.example.mentalhealth.entities.Question">
+        <id property="id" column="id" />
+        <result property="type" column="type" />
+        <result property="content" column="content" />
+        <result property="options" column="options"
+                typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
+        <result property="answer" column="answer" />
+        <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <select id="selectByQuery" resultType="com.example.mentalhealth.entities.Question" resultMap="QuestionResultMap">
+        SELECT * FROM question
+        <where>
+            <if test="question.content != null and question.content != ''">
+                AND content LIKE CONCAT('%', #{question.content}, '%')
+            </if>
+            <if test="question.type != null">
+                AND type = #{question.type}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+
+
+</mapper>
