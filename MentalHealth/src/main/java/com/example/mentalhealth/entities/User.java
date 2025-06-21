@@ -1,6 +1,7 @@
 package com.example.mentalhealth.entities;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class User {
     private String email;//邮箱
     private String phone;//电话
     private String sex;//性别
+    @TableField("r_id")
     private Integer rId;//角色id
     private String creatTime;//用户创建时间
 

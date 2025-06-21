@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 
 // 试卷
@@ -22,4 +23,6 @@ public class ExamPaper {
     private BigDecimal totalScore; // 总分
     private BigDecimal passScore;  // 及格分数
     private Date createTime;    // 创建时间
+
+    private List<Question> questions;//接收试题使用
 }

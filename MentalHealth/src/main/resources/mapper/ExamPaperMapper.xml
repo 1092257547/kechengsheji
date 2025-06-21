@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mentalhealth.mapper.ExamPaperMapper">
+    <insert id="insert" parameterType="com.example.mentalhealth.entities.ExamPaper" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO exam_paper (title, total_score, pass_score)
+        VALUES (#{title}, #{totalScore}, #{passScore})
+    </insert>
+    <select id="selectByQuery" resultType="com.example.mentalhealth.entities.ExamPaper">
+        SELECT * FROM exam_paper WHERE 1=1
+        <if test="examPaper.title != null">
+            AND title LIKE CONCAT('%', #{examPaper.title}, '%')
+        </if>
+    </select>
+</mapper>

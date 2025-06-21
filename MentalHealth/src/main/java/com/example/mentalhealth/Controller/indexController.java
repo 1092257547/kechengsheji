@@ -24,19 +24,18 @@ public class indexController {
      */
     @PostMapping("/register")
     public ResultData register(@RequestBody User user) {
-        System.out.println(user);
         // 检查用户是否已存在
         if (userService.queryUserByUsername(user.getUsername())!=null) {
             return new ResultData(400, "用户已存在");
         }
         // 设置用户角色为普通用户
         user.setRId(2);
+        System.out.println(user.getRId());
         // 保存用户
         int i = userService.register(user);
         if(i==0){
             return new ResultData(500, "注册失败");
         }
-
         return new ResultData(200, "注册成功");
     }
 

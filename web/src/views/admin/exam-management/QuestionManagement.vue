@@ -361,7 +361,7 @@ export default {
 
     // 确认删除
     confirmDeleteQuestion() {
-      // 模拟API请求
+      // API请求
       setTimeout(() => {
         this.$http.delete(`/api/deleteQuestion/${this.currentQuestionId}`)
           .then(() => {

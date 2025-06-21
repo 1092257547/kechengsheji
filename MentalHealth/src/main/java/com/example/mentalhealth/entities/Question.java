@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import lombok.Data;
 import org.apache.ibatis.type.JdbcType;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -23,5 +24,6 @@ public class Question {
     private String answer;      // 答案
     private String explanation; // 答案解析
     private Date createTime;    // 创建时间
+    private BigDecimal score;   // 题目分数
 }
 

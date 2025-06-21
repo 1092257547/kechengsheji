@@ -26,6 +26,10 @@
         ORDER BY create_time DESC
     </select>
 
+    <select id="selectById" resultType="com.example.mentalhealth.entities.Question" resultMap="QuestionResultMap">
+          SELECT * FROM question WHERE id = #{id}
+    </select>
+
 
 
 </mapper>
